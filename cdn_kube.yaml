@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdn-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      cdn: web
+  template:
+    metadata:
+      labels:
+        cdn: web
+    spec:
+      containers:
+      - name: cdn-master
+        image: entty/cloud_project:v4
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdn-start
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    cdn: web
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
