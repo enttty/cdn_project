@@ -1,4 +1,5 @@
 :::: hot ::::
+https://codilime.com/harnessing-the-power-of-kubernetes-7-use-cases/
 
 ! cdn example setup
 https://css-tricks.com/adding-a-cdn-to-your-website/
@@ -25,25 +26,24 @@ sudo docker build -t <name> <path-to-dockerfile>
 Deploy manually:
 ----------------
 
-1-Install docker
+(1-Install docker)
 
-2-run::: docker run --name mynode -dp 80:80 entty/cloud_project:v4
+2-create new container from given image and start it::: 
+	docker run --name mynode -dp 80:80 entty/cloud_project:v4
 
---- useful commands ---
+--- cleanup ---
 docker rmi <image>
-
 docker kill <container>
 docker rm <container>
 
-sudo docker build -t <name> <path-to-dockerfile>
-
-docker run --name <containername> -dp <port1>:<port2> <imagename>
-
+jump into container
+------
 docker exec -ti <container> /bin/bash
 (alt: docker attach?)
 
-docker tag <oldname> <newname>
+in order to push to dockerhub, names must match. if image name has changesd, tag it dfirst
 
+docker tag <oldname> <newname>
 sudo docker push <tag>
 
 
