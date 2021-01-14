@@ -1,0 +1,46 @@
+move everything here: https://github.com/enttty/cdn_project.git
+replace this with a readme.md (deployment instructions) file ASAP
+
+---implementation ideas---
+----------------------------------
+
+GUI A - use apache directory listing (customized?)
+		A1? use custom header.html, footer.html  ---> can use php inside??? <<=== best simplest option!?
+		A2? use custom css-file (randomly pick different color per node?) 
+			-> run JS/PHP-script on user click to trigger functionality
+				! this way can only start processing AFTER click, limitation & possible delays
+GUI B - build our own site (AS small AS possible)
+		B1? user choses file from table -> system picks/recommends best server
+		B2? list of servers/locations, ask user to pick
+		
+Storage issue: currently all files are inside docker image. 				<<=== ! ! ! top prio ! ! ! 
+				1) Move download content to storage solution (AWS bucket?)
+				((2) www-data goes there, too? config files, too?)
+				(((3)) put config/user data in DB instead)))
+		
+core: determine or estimate user location to find best target server (assume only distance is relevant, not user/traffic/network
+		1) server locations given, estimate user location by call to ip-localisation-webservice, calculate (?? 2D,3D ??) -Distance
+		2) ping user ip from each net node, pick by latency (might fail, network security)
+		3) make user download a sequence of small probe files of known size, calculate & pick by download speeds
+
+(core: sync www-data and content files)
+	--> NO backend. publishers just upload or remove on (any?) node, system scans files & handles html, etc)
+(core: use different protocols based on file type/size <<=== significant diff?)
+
+(core: scalability features) (monitoring) (loadbalancing) 
+(core: high integrity features) (failover/recover outages) (perform or simulate dos-attack) 
+
+-------------------
+
+To access dev-machine:
+----------------------
+1-install ssh-client (highly recommend using this: https://mobaxterm.mobatek.net/)
+
+2-generate pub/priv-key
+	in mobaXterm,local sesseion, run "ssh-keygen -b 2048 -m PEM"
+
+3-send contents of id_rsa.pem to me for user setup
+
+4-connect 
+	- (local session) "ssh -vi <path-to-key> <username>@<ip>"
+	- or create session via Sesseions-Toolbar, save click connect
