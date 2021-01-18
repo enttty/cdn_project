@@ -7,7 +7,9 @@
 
 # You may uncomment the following lines if you want `ls' to be colorized:
 export LS_OPTIONS='--color=auto'
-eval "`dircolors`"
+#eval "`dircolors`"
+#^^^^ removed, throws """dircolors: no SHELL environment variable, and no shell type option given"""
+
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -l'
 alias la='ls -Altrh'
