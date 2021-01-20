@@ -69,14 +69,23 @@ Deploy by Kubernetes:
 kubectl version
 
 kubectl get <services|pods|??>
+-----------
+!!! most-best-easy: !!! "kubectl get all -A"
+					!!! 		-> to get resources of all types in All namespaces...
+					
 
 kubectl apply -f <filename.yaml>
+!!! best: "kubectl apply -f </path/to/yaml/dir/>"
+
 
 kubectl logs cdn-demo
+--> get log entries from pod cdn-demo....
 
 kubectl delete pod <name>
 kubectl delete pod --all
-  
+!!! eaziest: use same file(s) as in apply/create/update- orders. eg: "kubectl delete -f <dirname/ ||...or...|| filename.yaml>"
+--> dangling resources from manual/partial removals can be dangerous.... ???
+===> spent ~2h trying to remove solo service in custom ns.... the one that FINALLY worked::: kubectl -n cdn-ns delete pod,svc --all
   
   
 

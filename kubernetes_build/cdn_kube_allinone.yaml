@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdn-dpl
+  namespace: "cdn-ns"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdn-overmind
+  template:
+    metadata:
+      labels:
+        app: cdn-overmind
+    spec:
+      containers:
+      - name: cdn-overmind-pod
+        image: entty/cloud_project:v4
+--- 
+## LoadBalancer should make us visible on LAN-IP
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdn-svc
+  namespace: modules
+spec:
+  ports:
+    - port: 80
+  type: LoadBalancer
+  selector:
+    app: cdn-overmind
+### Using Service type NodePort --> only available inside cluster or via "kubectl proxy"
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # name: cdn-svc
+  # namespace: cdn-ns
+# spec:
+  # type: NodePort
+  # selector:
+    # app: cdn-overmind
+  # ports:
+  # - port: 80
+    # targetPort: 80
+    # nodePort: 30080

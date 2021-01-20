@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdn-dpl
+  namespace: modules
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdn-overmind
+  template:
+    metadata:
+      labels:
+        app: cdn-overmind
+    spec:
+      containers:
+      - name: cdn-overmind-pod
+        image: entty/cloud_project:v4
