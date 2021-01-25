@@ -1,20 +1,21 @@
 :::: hot ::::
-https://codilime.com/harnessing-the-power-of-kubernetes-7-use-cases/
 
-! cdn example setup
-https://css-tricks.com/adding-a-cdn-to-your-website/
+! cdn examples:
+- https://css-tricks.com/adding-a-cdn-to-your-website/
+- https://www.presslabs.com/docs/managed-wordpress/platform-specifications/cdn-specifications/
+
+! tool for measuring/manipulating website access speed (=> verify implementation)
+	--> ...use to evaluate effect of cdn. does it speed up website access? https://developers.google.com/speed/pagespeed/insights/
+	--> ! simulate slow network / long distances with this? https://wiki.linuxfoundation.org/networking/netem#netem
 
 ! howto storage in kubernetes:
 https://kubernetes.io/docs/concepts/storage/volumes/
 
+? howto networking in kubernetes? 
+	--> service types NodePort/ClusterIp (internal) and LoadBalancer/Ingress/EndPoint (external)
+	--> https://kubernetes.io/docs/concepts/services-networking/service/
 ? are there tools/solutions for network monitoring & dynamic route management in kubernetes ?
 
-! simulate slow nodes with this?
-https://css-tricks.com/adding-a-cdn-to-your-website/
-
-! tool for checking website access speed
-.... use to evaluate effect of cdn.... speed up/slow downs?s
-https://developers.google.com/speed/pagespeed/insights/
 
 :::::::::::::
 
