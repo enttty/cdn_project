@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cdn-dpl
-  namespace: "cdn-ns"
+  namespace: one
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: cdn-overmind
@@ -15,14 +15,14 @@ spec:
     spec:
       containers:
       - name: cdn-overmind-pod
-        image: entty/cloud_project:v4
+        image: entty/cloud_project:v6
 --- 
 ## LoadBalancer should make us visible on LAN-IP
 apiVersion: v1
 kind: Service
 metadata:
   name: cdn-svc
-  namespace: modules
+  namespace: one
 spec:
   ports:
     - port: 80

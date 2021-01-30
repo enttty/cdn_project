@@ -9,7 +9,10 @@
 	--> ! simulate slow network / long distances with this? https://wiki.linuxfoundation.org/networking/netem#netem
 
 ! howto storage in kubernetes:
-https://kubernetes.io/docs/concepts/storage/volumes/
+- https://kubernetes.io/docs/concepts/storage/volumes/
+!storage services/providers:
+- https://min.io/
+- aws EBS/EFS
 
 ? howto networking in kubernetes? 
 	--> service types NodePort/ClusterIp (internal) and LoadBalancer/Ingress/EndPoint (external)
