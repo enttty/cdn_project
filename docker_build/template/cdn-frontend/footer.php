@@ -1,11 +1,21 @@
         <div class="block">
-                <center>Hi this is the new Apaxy V2</center>
+                <center>This code was nicked from Apaxy V2</center>
         </div><!--/.postlisting-->
 
+		
 </div><!--/.wrapper-->
 
+<br><div>Now we're below the table, here's php::</div><br>
+<?php
+echo "<br><div><p>here's some php-generated text (I hope)</p></div>";
+?>
+<br>
+<?php
+echo "<br><address> Apache/2.4.38 (Debian) Server at IP localhost Port xy</address>";
+?>
+
 <div class="footer">
-        Apaxy V2 by <a href="https://github.com/fusengine">Fusengine</a>
+        
 </div><!--/.footer-->
 <script type="text/javascript">
 // grab the 2nd child and add the parent class. tr:nth-child(2)

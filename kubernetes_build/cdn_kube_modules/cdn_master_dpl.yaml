@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: cdn-overmind-pod
-        image: entty/cloud_project:v6
+        image: entty/cloud_project:v7
         #- name: cdn-master-node
         #image: k8s.gcr.io/test-webserver
