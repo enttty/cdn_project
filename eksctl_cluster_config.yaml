@@ -1,0 +1,23 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cdn-test-cluster
+  region: eu-central-1
+
+vpc:
+  id: "vpc-94fe7afe"
+  subnets:
+    public:
+      eu-central-1a:
+          id: "subnet-2f365945"
+      eu-central-1b:
+          id: "subnet-ba449fc6"
+      eu-central-1c:
+          id: "subnet-afe148e3"
+
+## eksctl requirements for subnets: https://eksctl.io/usage/vpc-networking/
+# tags--> kubernetes.io/role/elb:1, kubernetes.io/cluster/cdn-test-cluster:owned
+
+nodeGroups:
+  - name: ng-1
