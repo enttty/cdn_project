@@ -4,7 +4,8 @@ kind: ClusterConfig
 metadata:
   name: cdn-test-cluster
   region: eu-central-1
-
+  tags:
+   'cluster': 'cdn_cluster'
 vpc:
   id: "vpc-94fe7afe"
   subnets:
@@ -21,3 +22,11 @@ vpc:
 
 nodeGroups:
   - name: ng-1
+    instanceType: t2.medium
+    desiredCapacity: 1
+    volumeSize: 5
+    ssh:
+     allow: true
+            #publicKeyName: 'cdn_dev_key'
+    tags:
+      'cluster': 'cdn_cluster'

@@ -2,33 +2,48 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cdn-dpl
-  namespace: one
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: cdn-overmind
+      app: cdn
   template:
     metadata:
       labels:
-        app: cdn-overmind
+        app: cdn
     spec:
       containers:
       - name: cdn-overmind-pod
         image: entty/cloud_project:v7
+        env:
+          - name: SLAVES
+            value: "0"
+          - name: IS_MASTER
+            value: "True"
+        volumeMounts:
+          - mountPath: /var/www/html/mounted
+            name: test-volume
+      volumes:
+          # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.
+          - name: test-volume
+            # This AWS EBS volume must already exist.
+            awsElasticBlockStore:
+              volumeID: vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
+              fsType: ext4
+
+
 --- 
 ## LoadBalancer should make us visible on LAN-IP
 apiVersion: v1
 kind: Service
 metadata:
   name: cdn-svc
-  namespace: one
 spec:
   ports:
     - port: 80
   type: LoadBalancer
   selector:
-    app: cdn-overmind
+    app: cdn
 ### Using Service type NodePort --> only available inside cluster or via "kubectl proxy"
 # apiVersion: v1
 # kind: Service

@@ -16,7 +16,7 @@ COPY ./public-html/ /var/www/html/
 
 # template files will stay inside image
 COPY ./template/ /var/www/template/
-
+# File does not exist: /var/www/html/template/cdn-frontend/style.css
 
 #RUN mv /var/www/html/docker-php.conf /etc/apache2/conf-available/docker.conf
 

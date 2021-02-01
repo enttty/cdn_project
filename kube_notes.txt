@@ -1,5 +1,9 @@
 :::: hot ::::
 
+
+!!! for using multiple nodes in seperate reasons: must define common auto-scaling-group:
+https://aws.amazon.com/blogs/containers/amazon-eks-cluster-multi-zone-auto-scaling-groups/
+
 ! cdn examples:
 - https://css-tricks.com/adding-a-cdn-to-your-website/
 - https://www.presslabs.com/docs/managed-wordpress/platform-specifications/cdn-specifications/

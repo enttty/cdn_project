@@ -1,20 +1,25 @@
+# :se et ts=2 sw=2 sw=2
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cdn-dpl
-  namespace: modules
+  labels:
+    app: cdn
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cdn-overmind
+      app: cdn
   template:
     metadata:
       labels:
-        app: cdn-overmind
+        app: cdn
     spec:
       containers:
       - name: cdn-overmind-pod
         image: entty/cloud_project:v7
         #- name: cdn-master-node
         #image: k8s.gcr.io/test-webserver
+      - ports:
+        containerPort: 8080
+

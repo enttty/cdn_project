@@ -1,18 +1,28 @@
+#vim: ts=2 sts=2 sw=2
 apiVersion: v1
 kind: Pod
 metadata:
   name: cdn-master-node
-  namespace: modules
 spec:
   containers:
-  - image: k8s.gcr.io/test-webserver
-    name: dummyserver
+  - name: testfileserver
+    image: entty/cloud_project:v7
+    env:
+      - name: SLAVES
+        value: "0"
+      - name: IS_MASTER
+        value: "True"
     volumeMounts:
-    - mountPath: /data
+    - mountPath: /var/www/html/mounted
       name: test-volume
   volumes:
-  - name: test-volume
-    # This AWS EBS volume must already exist.
-    awsElasticBlockStore:
-      volumeID: vol-021376eb4be8f0714
-      fsType: ext4
+    - name: test-volume
+      awsElasticBlockStore:
+        volumeID: vol-09cf1bb1375ee6749 #vol-021376eb4be8f0714 # This AWS EBS volume must already exist & be in same zone as instance
+        fsType: ext4
+        #hostPath:  <<-- uses path on instance? vpc? fs where kubectl is runnning? win10/wsl?
+        # #  directory location on host <<-- rootDir on host=?
+        # path: /mnt/c/Users/danie/Desktop/tmp
+        # type: Directory
+        #emptyDir: {} <<-- ephemeral emptyDir works but not useful here
+
