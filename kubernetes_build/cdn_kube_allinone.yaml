@@ -13,15 +13,13 @@ spec:
         app: cdn
     spec:
       containers:
-      - name: cdn-overmind-pod
-        image: entty/cloud_project:v7
+      - name: cdn-master
+        image: entty/cloud_project:latest
         env:
-          - name: SLAVES
-            value: "0"
-          - name: IS_MASTER
-            value: "True"
+          - name: CDN_ROLE 
+            value: "MASTER"
         volumeMounts:
-          - mountPath: /var/www/html/mounted
+          - mountPath: /var/www/html/public-html
             name: test-volume
       volumes:
           # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.
@@ -58,3 +56,24 @@ spec:
   # - port: 80
     # targetPort: 80
     # nodePort: 30080
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "* */10 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            imagePullPolicy: IfNotPresent
+            args:
+            - /bin/sh
+            - -c
+            - date; echo Hello from cluster node $HOSTNAME;
+          restartPolicy: OnFailure
+

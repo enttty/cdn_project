@@ -7,7 +7,7 @@ RUN apt-get -y install nano rsync
 
 # copy apache config and www-data
 COPY ./apache_conf/site.conf /etc/apache2/sites-available/000-default.conf
-COPY ./apache_conf/docker.conf /etc/apache2/conf-available/docker-php.conf
+COPY ./apache_conf/master.conf /etc/apache2/conf-available/000-default-master.conf
 COPY ./apache_conf/php.ini /usr/local/etc/php/php.ini
 
 
@@ -18,5 +18,5 @@ COPY ./public-html/ /var/www/html/
 COPY ./template/ /var/www/template/
 # File does not exist: /var/www/html/template/cdn-frontend/style.css
 
-#RUN mv /var/www/html/docker-php.conf /etc/apache2/conf-available/docker.conf
+#RUN mv /var/www/html/docker-php.conf /etc/apache2/conf-available/docker.con
 
