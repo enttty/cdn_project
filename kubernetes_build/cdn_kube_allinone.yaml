@@ -19,7 +19,7 @@ spec:
           - name: CDN_ROLE 
             value: "MASTER"
         volumeMounts:
-          - mountPath: /var/www/html/public-html
+          - mountPath: /var/www/html/test123
             name: test-volume
       volumes:
           # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.

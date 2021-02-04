@@ -10,8 +10,8 @@ RUN apt-get -y install iputils-ping tree
 
 # copy apache config and www-data
 COPY ./apache_conf/site.conf /etc/apache2/sites-available/000-default.conf
-COPY ./apache_conf/master.conf /etc/apache2/conf-available/000-default-master.conf
-COPY ./apache_conf/php.ini /usr/local/etc/php/php.ini
+COPY ./apache_conf/master.conf /etc/apache2/sites-available/000-default-master.conf
+#COPY ./apache_conf/php.ini /usr/local/etc/php/php.ini
 
 
 # copy www-data (!!TODO:replace this by mounting storage, move example files there!!)

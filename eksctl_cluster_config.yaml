@@ -30,3 +30,13 @@ nodeGroups:
             #publicKeyName: 'cdn_dev_key'
     tags:
       'cluster': 'cdn_cluster'
+  - name: ng-2
+    instanceType: t2.medium
+    desiredCapacity: 1
+    volumeSize: 5
+    ssh:
+     allow: true
+            #publicKeyName: 'cdn_dev_key'
+    tags:
+      'cluster': 'cdn_cluster'
+
