@@ -64,7 +64,7 @@
 		echo "<script type = 'text/javascript'>
           {
             function Redirect() {
-               window.location = '/httb';
+               window.location = './httb/';
                 }            
             setTimeout('Redirect()',30000);
          }
