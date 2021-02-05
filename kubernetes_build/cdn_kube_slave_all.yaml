@@ -1,47 +1,62 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cdn-dpl
+  name: cdn-frontend
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: cdn
+      role: minion    
   template:
     metadata:
       labels:
         app: cdn
     spec:
       containers:
-      - name: cdn-master
+      - name: cdn-minion
         image: entty/cloud_project:latest
         env:
           - name: CDN_ROLE 
-            value: "MASTER"
+            value: Minion
         volumeMounts:
-          - mountPath: /var/www/html/test123
-            name: test-volume
+          - mountPath: /var/share
+            name: shared-minion-pvc 
       volumes:
+      - name: shared
+        persistentVolumeClaim:
+          claimName: shared-minion-pvc
           # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.
-          - name: test-volume
+          #- name: test-volume
             # This AWS EBS volume must already exist.
-            awsElasticBlockStore:
-              volumeID: vol-021376eb4be8f0714  #vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
-              fsType: ext4
-
-
+            # awsElasticBlockStore:
+            # volumeID: vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
+            # fsType: ext4
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+    name: shared-minion-pvc
+spec:
+    accessModes:
+      - ReadWriteMany
+    storageClassName: myvolume 
+    resources:
+        requests:
+            storage: 1Gi
 --- 
 ## LoadBalancer should make us visible on LAN-IP
 apiVersion: v1
 kind: Service
 metadata:
-  name: cdn-svc
+  name: frontend-lb
 spec:
   ports:
     - port: 80
   type: LoadBalancer
   selector:
     app: cdn
+    role: minion
 ### Using Service type NodePort --> only available inside cluster or via "kubectl proxy"
 # apiVersion: v1
 # kind: Service
@@ -74,6 +89,6 @@ spec:
             args:
             - /bin/sh
             - -c
-            - date; echo Hello from cluster node $HOSTNAME;
+            - date; echo "Hello from cluster node $HOSTNAME";
           restartPolicy: OnFailure
 

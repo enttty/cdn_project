@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: master-dpl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdn
+      role: master
+  template:
+    metadata:
+      labels:
+        app: cdn
+        role: master
+    spec:
+      containers:
+      - name: cdn-master
+        image: entty/cloud_project:latest
+        env:
+          - name: CDN_ROLE 
+            value: "MASTER"
+          - name: SLAVE_IP
+            value: localhost
+        volumeMounts:
+        - name: master-filestorage
+          mountPath: /var/share
+      volumes:
+          # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.
+      - name: master-filestorage
+        persistentVolumeClaim:
+          claimName: master-pv-claim
+            # This AWS EBS volume must already exist.
+            #awsElasticBlockStore:
+            #  volumeID: vol-021376eb4be8f0714 #vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
+            #  fsType: ext4
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+    name: master-pv-claim
+spec:
+    accessModes:
+      - ReadWriteMany
+    storageClassName: myvolume
+    resources:
+        requests:
+            storage: 5Gi
+--- 
+# ingress networking required for securing backend?
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  # name of this ingress rule
+  name: this-mi-ingress
+spec:
+  rules:
+  # specify the protocal, this rule should be applied for
+  - http:
+      paths:
+      # specify the resource path to which this rule should be applied
+      - path: /
+        # specify the service, the request should be forwarded to 
+        backend: 
+          serviceName: cdn-master-svc
+          servicePort: 9200
+## LoadBalancer should make us visible on LAN-IP
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: cdn-svc
+#spec:
+#  ports:
+#    - port: 80
+#  type: LoadBalancer
+#  selector:
+#    app: cdn
+### Using Service type NodePort --> only available inside cluster or via "kubectl proxy"
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # name: cdn-svc
+  # namespace: cdn-ns
+# spec:
+  # type: NodePort
+  # selector:
+    # app: cdn-overmind
+  # ports:
+  # - port: 80
+    # targetPort: 80
+    # nodePort: 30080
+---
+#apiVersion: batch/v1beta1
+#kind: CronJob
+#metadata:
+#  name: syncer
+#spec:
+#  schedule: "* */10 * * *"
+#  jobTemplate:
+#    spec:
+#      template:
+#        spec:
+#          containers:
+#          - name: rsync
+#            image: eeacms/rsync
+#            imagePullPolicy: IfNotPresent
+#            args:
+#            - --help #rm -i -v /data:/share instrumentisto/rsync-ssh rsync -avz ${SLAVE_IP}:/share /mnt/
+#          restartPolicy: Never
+#
