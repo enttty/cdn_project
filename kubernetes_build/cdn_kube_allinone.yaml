@@ -18,27 +18,40 @@ spec:
         env:
           - name: CDN_ROLE 
             value: "MASTER"
+          - name: SLAVE_IP
+            value: localhost
         volumeMounts:
-          - mountPath: /var/www/html/test123
-            name: test-volume
+        - name: master-filestorage
+          mountPath: /var/share
       volumes:
           # toDo: switch to getting storage config from different configMaps for development and production. can't use ebs volume on local nodes.
-          - name: test-volume
-            # This AWS EBS volume must already exist.
-            awsElasticBlockStore:
-              volumeID: vol-021376eb4be8f0714  #vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
-              fsType: ext4
-
-
+      - name: master-filestorage
+        persistentVolumeClaim:
+          claimName: master-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: master-pv-claim
+    labels:
+      app: cdn
+spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+        requests:
+            storage: 5Gi
 --- 
-## LoadBalancer should make us visible on LAN-IP
 apiVersion: v1
 kind: Service
 metadata:
   name: cdn-svc
 spec:
   ports:
-    - port: 80
+    - name: frontendport
+      port: 80
+    - name: backendport
+      port: 8008
   type: LoadBalancer
   selector:
     app: cdn
@@ -57,23 +70,23 @@ spec:
     # targetPort: 80
     # nodePort: 30080
 ---
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: hello
-spec:
-  schedule: "* */10 * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: hello
-            image: busybox
-            imagePullPolicy: IfNotPresent
-            args:
-            - /bin/sh
-            - -c
-            - date; echo Hello from cluster node $HOSTNAME;
-          restartPolicy: OnFailure
+# apiVersion: batch/v1beta1
+# kind: CronJob
+# metadata:
+  # name: hello
+# spec:
+  # schedule: "* */10 * * *"
+  # jobTemplate:
+    # spec:
+      # template:
+        # spec:
+          # containers:
+          # - name: hello
+            # image: busybox
+            # imagePullPolicy: IfNotPresent
+            # args:
+            # - /bin/sh
+            # - -c
+            # - date; echo Hello from cluster node $HOSTNAME;
+          # restartPolicy: OnFailure
 
