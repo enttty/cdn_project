@@ -1,0 +1,4 @@
+resources:
+  - cdn_master_dpl.yaml
+  - cdn_master_pvc.yaml
+  - cdn_master_svc.yaml

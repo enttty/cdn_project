@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: shared-minion-pvc
+    labels: 
+      app: cdn
+      role: minion
+spec:
+    accessModes:
+      - ReadWriteMany
+    resources:
+        requests:
+            storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,18 +47,6 @@ spec:
             # volumeID: vol-09cf1bb1375ee6749 #"vol-021376eb4be8f0714" must exist, zone must match instance zone
             # fsType: ext4
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-    name: shared-minion-pvc
-spec:
-    accessModes:
-      - ReadWriteMany
-    storageClassName: myvolume 
-    resources:
-        requests:
-            storage: 1Gi
---- 
 ## LoadBalancer should make us visible on LAN-IP
 apiVersion: v1
 kind: Service

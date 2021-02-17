@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdn-dpl
+spec:
+  replicas: 5 
+  selector:
+    matchLabels:
+      app: cdn
+  template:
+    metadata:
+      labels:
+        app: cdn
+    spec:
+      containers:
+      - name: cdn-slave
+        image: entty/cloud_project:latest
+        env:
+          - name: CDN_ROLE 
+            value: "SLAVE"
+          - name: SLAVE_IP
+            value: $HOSTNAME
+        volumeMounts:
+        - mountPath: /var/www/html/share
+          name: cache-volume
+      volumes:
+      - name: cache-volume
+        emptyDir: {}
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdn-slave-svc
+spec:
+  ports:
+    - name: frontendport
+      port: 80
+  type: LoadBalancer
+  selector:
+    app: cdn
+### Using Service type NodePort --> only available inside cluster or via "kubectl proxy"
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # name: cdn-svc
+  # namespace: cdn-ns
+# spec:
+  # type: NodePort
+  # selector:
+    # app: cdn-overmind
+  # ports:
+  # - port: 80
+    # targetPort: 80
+    # nodePort: 30080
+---
+# apiVersion: batch/v1beta1
+# kind: CronJob
+# metadata:
+  # name: hello
+# spec:
+  # schedule: "* */10 * * *"
+  # jobTemplate:
+    # spec:
+      # template:
+        # spec:
+          # containers:
+          # - name: hello
+            # image: busybox
+            # imagePullPolicy: IfNotPresent
+            # args:
+            # - /bin/sh
+            # - -c
+            # - date; echo Hello from cluster node $HOSTNAME;
+          # restartPolicy: OnFailure
+
